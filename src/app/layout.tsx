@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { JotaiProvider } from "@/components/jotai_provider"
 import { ConvexClientProvider } from "@/components/convex_client_provider"
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server"
 import { Modals } from "@/components/modals"
@@ -20,9 +21,11 @@ export default function RootLayout({
             <html lang="en">
                 <body className={``}>
                     <ConvexClientProvider>
-                        <Toaster />
-                        <Modals />
-                        {children}
+                        <JotaiProvider>
+                            <Toaster />
+                            <Modals />
+                            {children}
+                        </JotaiProvider>
                     </ConvexClientProvider>
                 </body>
             </html>
