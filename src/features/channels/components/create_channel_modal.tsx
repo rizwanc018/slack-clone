@@ -6,17 +6,17 @@ import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useCreateChannel } from "../api/use_create_channel"
-import { useWorkspaceId } from "@/hooks/use_workspace_id"
 import { toast } from "sonner"
+import { useWorkspaceId } from "@/hooks/use_workspace_id"
 
 export const CreateChannelModal = () => {
+    const router = useRouter()
     const [open, setOpen] = useCreateChannelModal()
     const { mutate, isPending } = useCreateChannel()
     const workspaceId = useWorkspaceId()
 
     const [name, setName] = useState("")
 
-    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -28,8 +28,11 @@ export const CreateChannelModal = () => {
             {
                 onSuccess: (id) => {
                     toast.success("Channel created successfully")
-                    router.push(`/workspace/${workspaceId}/channels/${id}`)
+                    router.push(`/workspace/${workspaceId}/channel/${id}`)
                     handleClose()
+                },
+                onError: () => {
+                    toast.error("Failed to create channel")
                 },
             }
         )

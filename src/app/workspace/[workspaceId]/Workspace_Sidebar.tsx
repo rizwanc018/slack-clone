@@ -1,4 +1,4 @@
-import { useCurrentMembers } from "@/features/members/api/use_current_memebers"
+import { useCurrentMember } from "@/features/members/api/use_current_memeber"
 import { useGetWorkspace } from "@/features/workspaces/api/use_get_workspace"
 import { useWorkspaceId } from "@/hooks/use_workspace_id"
 import { AlertTriangle, HashIcon, Loader, MessageSquareText, SendHorizonal } from "lucide-react"
@@ -6,13 +6,13 @@ import WorkspaceHeader from "./Workspace_Header"
 import { SidebarItem } from "./Sidebar_Item"
 import { useGetChannels } from "@/features/channels/api/use_get_channels"
 import { WorkspaceSection } from "./Workspace_Section"
-import { useGetMembers } from "@/features/members/api/use_get_memebers"
 import { UserItem } from "./User_item"
 import { useCreateChannelModal } from "@/features/channels/store/use_create_channel_modal"
+import { useGetMembers } from "@/features/members/api/use_get_memebers"
 
 const WorkspaceSidebar = () => {
     const workspaceId = useWorkspaceId()
-    const { data: member, isLoading: isMemberLoading } = useCurrentMembers({ workspaceId })
+    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
     const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ id: workspaceId })
     const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
     const { data: members, isLoading: isMembersLoading } = useGetMembers({ workspaceId })
