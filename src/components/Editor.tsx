@@ -72,7 +72,19 @@ const Editor = ({
                         enter: {
                             key: "Enter",
                             handler: () => {
-                                return
+                                const text = quill.getText()
+                                const addedImage = imageElementRef.current?.files?.[0] || null
+
+                                const isEmpty =
+                                    !addedImage && text.replace(/<(.|\n)*?>/gm, "").trim().length === 0
+                                if (isEmpty) {
+                                    return
+                                }
+                                const body = JSON.stringify(quill.getContents())
+                                submitRef.current?.({
+                                    body,
+                                    image: addedImage,
+                                })
                             },
                         },
                     },
@@ -129,7 +141,7 @@ const Editor = ({
         quill?.insertText(quill.getSelection()?.index || 0, emoji.native)
     }
 
-    const isEmpty = text.replace(/<(.|\n)*?>/gm, "").trim().length === 0
+    const isEmpty = !image && text.replace(/<(.|\n)*?>/gm, "").trim().length === 0
 
     return (
         <div className="flex flex-col mb-1">
@@ -212,6 +224,12 @@ const Editor = ({
                     {variant === "create" && (
                         <Button
                             disabled={disabled || isEmpty}
+                            onClick={() =>
+                                onSubmit({
+                                    body: JSON.stringify(quillRef.current?.getContents()),
+                                    image,
+                                })
+                            }
                             size={"iconsSm"}
                             variant={"ghost"}
                             className={cn(
