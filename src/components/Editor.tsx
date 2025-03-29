@@ -3,10 +3,12 @@ import "quill/dist/quill.snow.css"
 import { MutableRefObject, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Button } from "./ui/button"
 import { PiTextAa } from "react-icons/pi"
-import { ImageIcon, Smile } from "lucide-react"
+import { ImageIcon, Smile, XIcon } from "lucide-react"
 import { MdSend } from "react-icons/md"
 import { Hint } from "./Hint"
 import { cn } from "@/lib/utils"
+import { EmojiPopover } from "./emoji_popover"
+import Image from "next/image"
 
 type EditorValue = {
     image: File | null
@@ -33,6 +35,7 @@ const Editor = ({
     placeholder,
 }: EditorProps) => {
     const [text, setText] = useState("")
+    const [image, setImage] = useState<File | null>(null)
     const [isToolbarVisible, setIsToolbarVisible] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null)
@@ -41,6 +44,7 @@ const Editor = ({
     const quillRef = useRef<Quill | null>(null)
     const defaultValueRef = useRef(defaultValue)
     const disabledRef = useRef(disabled)
+    const imageElementRef = useRef<HTMLInputElement>(null)
 
     useLayoutEffect(() => {
         submitRef.current = onSubmit
@@ -119,14 +123,50 @@ const Editor = ({
             toolbarElement.classList.toggle("hidden")
         }
     }
-    const isEmpty = text.replace(/<(.|\n)*?>/gm, "").trim().length === 0
 
-    console.log({ text, isEmpty })
+    const onEmojiSelect = (emoji: any) => {
+        const quill = quillRef.current
+        quill?.insertText(quill.getSelection()?.index || 0, emoji.native)
+    }
+
+    const isEmpty = text.replace(/<(.|\n)*?>/gm, "").trim().length === 0
 
     return (
         <div className="flex flex-col mb-1">
+            <input
+                type="file"
+                accept="image/*"
+                ref={imageElementRef}
+                onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                        setImage(e.target.files[0])
+                    }
+                }}
+                className="hidden"
+            />
             <div className="flex flex-col border-slate-200 rounded-md overflow-hidden focus-within:border-slate-300 focus-within:shadow-sm transition bg-white">
-                <div ref={containerRef} className="h-full ql-custom" />
+                <div ref={containerRef} className="h-full ql-custom " />
+                {!!image && (
+                    <div className="p-2">
+                        <div className="relative size-[62px] flex items-center justify-center group/image">
+                            <button
+                                onClick={() => {
+                                    setImage(null)
+                                    imageElementRef.current!.value = ""
+                                }}
+                                className="hidden group-hover/image:flex rounded-full bg-black hover:bg-black absolute -top-2.5 -right-2.5 size-6 z-[4] border-2 border-white justify-center items-center text-white"
+                            >
+                                <XIcon className="size-3.5" />
+                            </button>
+                            <Image
+                                src={URL.createObjectURL(image)}
+                                alt={image.name}
+                                fill
+                                className="rounded-xl overflow-hidden border object-cover"
+                            />
+                        </div>
+                    </div>
+                )}
                 <div className="flex px-2 pb-2 z-[5]">
                     <Hint label={isToolbarVisible ? "Show formating" : "Hide formating"}>
                         <Button
@@ -138,14 +178,19 @@ const Editor = ({
                             <PiTextAa className="size-4" />
                         </Button>
                     </Hint>
-                    <Hint label="Emojis">
+                    <EmojiPopover hint="Emojis" onEmojiSelect={onEmojiSelect}>
                         <Button disabled={disabled} size={"iconsSm"} variant={"ghost"}>
                             <Smile className="size-4" />
                         </Button>
-                    </Hint>
+                    </EmojiPopover>
                     {variant === "create" && (
                         <Hint label="Image">
-                            <Button disabled={disabled} size={"iconsSm"} variant={"ghost"}>
+                            <Button
+                                disabled={disabled}
+                                size={"iconsSm"}
+                                variant={"ghost"}
+                                onClick={() => imageElementRef.current?.click()}
+                            >
                                 <ImageIcon className="size-4" />
                             </Button>
                         </Hint>
@@ -181,12 +226,19 @@ const Editor = ({
                     )}
                 </div>
             </div>
-            <div className="p-2 text-[10px] text-muted-foreground flex justify-end">
-                <p>
-                    <strong>Shift + Return</strong>
-                    to add a new line
-                </p>
-            </div>
+            {variant === "create" && (
+                <div
+                    className={cn(
+                        "p-2 text-[10px] text-muted-foreground flex justify-end transition",
+                        isEmpty && "opacity-0"
+                    )}
+                >
+                    <p>
+                        <strong>Shift + Return</strong>
+                        to add a new line
+                    </p>
+                </div>
+            )}
         </div>
     )
 }
