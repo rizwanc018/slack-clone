@@ -20,7 +20,7 @@ export const EmojiPopover = ({ children, hint, onEmojiSelect }: EmojiPopoverProp
 
         setTimeout(() => {
             setTooltipOpen(false)
-        }, 100)
+        }, 500)
     }
 
     return (
@@ -35,7 +35,7 @@ export const EmojiPopover = ({ children, hint, onEmojiSelect }: EmojiPopoverProp
                     </TooltipContent>
                 </Tooltip>
                 <PopoverContent className="p-0 border-0 shadow">
-                    <Picker data={data} onEmojiSelect={onEmojiSelect} />
+                    <Picker data={data} onEmojiSelect={onSelect} />
                 </PopoverContent>
             </Popover>
         </TooltipProvider>
