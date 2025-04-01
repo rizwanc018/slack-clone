@@ -5,6 +5,7 @@ import { ConvexClientProvider } from "@/components/convex_client_provider"
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server"
 import { Modals } from "@/components/modals"
 import { Toaster } from "@/components/ui/sonner"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 export const metadata: Metadata = {
     title: "Slack Clone",
@@ -21,11 +22,13 @@ export default function RootLayout({
             <html lang="en">
                 <body className={``}>
                     <ConvexClientProvider>
-                        <JotaiProvider>
-                            <Toaster />
-                            <Modals />
-                            {children}
-                        </JotaiProvider>
+                        <NuqsAdapter>
+                            <JotaiProvider>
+                                <Toaster />
+                                <Modals />
+                                {children}
+                            </JotaiProvider>
+                        </NuqsAdapter>
                     </ConvexClientProvider>
                 </body>
             </html>
