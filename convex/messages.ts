@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { v } from "convex/values"
 import { mutation, query, QueryCtx } from "./_generated/server"
 import { getAuthUserId } from "@convex-dev/auth/server"
