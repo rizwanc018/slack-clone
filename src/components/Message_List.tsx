@@ -1,13 +1,18 @@
 import { GetMessagesReturnType } from "@/features/messages/api/use_get_messages"
-import { compareAsc, differenceInMinutes, format, isToday, isYesterday } from "date-fns"
+import { differenceInMinutes, format, isToday, isYesterday } from "date-fns"
 import Message from "./Message"
+import ChannelHero from "./Channel_Hero"
+import { use, useState } from "react"
+import { Id } from "../../convex/_generated/dataModel"
+import { useWorkspaceId } from "@/hooks/use_workspace_id"
+import { useCurrentMember } from "@/features/members/api/use_current_memeber"
 
 interface MessageListProps {
     memeberName?: string
     memberImage?: string
     channelName?: string
     channelCreationTime?: number
-    variant?: "chat" | "thread" | "conversation"
+    variant?: "chat" | "thread" | "conversation" | "channel"
     data: GetMessagesReturnType | undefined
     loadMore: () => void
     isLoadingMore: boolean
@@ -38,6 +43,10 @@ export const MessageList = ({
     isLoadingMore,
     canLoadMore,
 }: MessageListProps) => {
+    const [editingId, setEditingId] = useState<Id<"messages"> | null>(null)
+    const workspaceId = useWorkspaceId()
+    const { data: currentMember } = useCurrentMember({ workspaceId })
+
     const groupedMessages = data?.reduce(
         (groups, message) => {
             const date = message?._creationTime ? new Date(message._creationTime) : null
@@ -82,20 +91,24 @@ export const MessageList = ({
                                     body={message.body}
                                     image={message.image}
                                     updatedAt={message.updatedAt}
-                                    cratedAt={message._creationTime}
+                                    createdAt={message._creationTime}
+                                    hideThreadButton={variant === "thread"}
                                     threadCount={message.threadCount}
                                     threadImage={message.threadImage}
                                     thereadTimestamp={message.thereadTimestamp}
-                                    isEditing={false}
-                                    setEditing={() => {}}
+                                    isEditing={editingId === message._id}
+                                    setEditingId={setEditingId}
                                     isCompact={isCompact}
-                                    isAuthor={false}
+                                    isAuthor={message.memberId === currentMember?._id}
                                 />
                             )
                         })}
                     </div>
                 )
             })}
+            {variant === "channel" && channelName && channelCreationTime && (
+                <ChannelHero channelName={channelName} channelCreationTime={channelCreationTime} />
+            )}
         </div>
     )
 }
