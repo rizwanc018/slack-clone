@@ -24,12 +24,14 @@ const WorkspaceIdLayout = ({ children }: WorkspaceIdLayoutProps) => {
             <Toolbar />
             <div className="flex h-[calc(100vh-40px)] ">
                 <Sidebar />
-                <ResizablePanelGroup direction="horizontal" autoSaveId={"ri-workspace-layout"}>
+                <ResizablePanelGroup direction="horizontal" autoSaveId={"sc-workspace-layout"}>
                     <ResizablePanel defaultSize={20} minSize={11} className="bg-[#5e2c5f]">
                         <WorkspaceSidebar />
                     </ResizablePanel>
                     <ResizableHandle withHandle />
-                    <ResizablePanel minSize={20}>{children}</ResizablePanel>
+                    <ResizablePanel minSize={20} defaultSize={80}>
+                        {children}
+                    </ResizablePanel>
                     {showPanel && (
                         <>
                             <ResizableHandle withHandle />
