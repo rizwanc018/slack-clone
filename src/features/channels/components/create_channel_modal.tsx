@@ -12,11 +12,10 @@ import { useWorkspaceId } from "@/hooks/use_workspace_id"
 export const CreateChannelModal = () => {
     const router = useRouter()
     const [open, setOpen] = useCreateChannelModal()
-    const { mutate, isPending } = useCreateChannel()
+    const { mutate } = useCreateChannel()
     const workspaceId = useWorkspaceId()
 
     const [name, setName] = useState("")
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()

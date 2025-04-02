@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Id } from "../../../../convex/_generated/dataModel"
 import { useGetMember } from "../api/use_get_memeber"
-import { AlertTriangle, Brush, ChevronDown, Loader, MailIcon, XIcon } from "lucide-react"
+import { AlertTriangle, ChevronDown, Loader, MailIcon, XIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
@@ -15,10 +15,8 @@ import { useRouter } from "next/navigation"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuLabel,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -162,7 +160,13 @@ const Profile = ({ memberId, onClose }: ProfileProps) => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant={"outline"} className="w-full capitalize">
-                                    {member.role} <ChevronDown className="size-4 ml-2" />
+                                    {isUpdatingMember ? (
+                                        <Loader className="size-4 animate-spin" />
+                                    ) : (
+                                        <>
+                                            {member.role} <ChevronDown className="size-4 ml-2" />
+                                        </>
+                                    )}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-full">
@@ -175,7 +179,12 @@ const Profile = ({ memberId, onClose }: ProfileProps) => {
                                 </DropdownMenuRadioGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Button onClick={onRemove} variant={"outline"} className="w-full capitalize">
+                        <Button
+                            onClick={onRemove}
+                            variant={"outline"}
+                            className="w-full capitalize"
+                            disabled={isRemovingMember}
+                        >
                             Remove
                         </Button>
                     </div>

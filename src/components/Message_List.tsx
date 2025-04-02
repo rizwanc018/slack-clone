@@ -2,11 +2,11 @@ import { GetMessagesReturnType } from "@/features/messages/api/use_get_messages"
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns"
 import Message from "./Message"
 import ChannelHero from "./Channel_Hero"
-import { use, useState } from "react"
+import { useState } from "react"
 import { Id } from "../../convex/_generated/dataModel"
 import { useWorkspaceId } from "@/hooks/use_workspace_id"
 import { useCurrentMember } from "@/features/members/api/use_current_memeber"
-import { Loader, LoaderIcon } from "lucide-react"
+import { Loader } from "lucide-react"
 import ConversationHero from "./Conversation_hero"
 
 interface MessageListProps {
@@ -45,7 +45,6 @@ export const MessageList = ({
     isLoadingMore,
     canLoadMore,
 }: MessageListProps) => {
-
     const [editingId, setEditingId] = useState<Id<"messages"> | null>(null)
     const workspaceId = useWorkspaceId()
     const { data: currentMember } = useCurrentMember({ workspaceId })

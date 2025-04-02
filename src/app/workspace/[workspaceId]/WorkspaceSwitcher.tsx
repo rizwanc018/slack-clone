@@ -3,8 +3,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useGetWorkspace } from "@/features/workspaces/api/use_get_workspace"
@@ -20,7 +18,7 @@ const WorkspaceSwitcher = () => {
     const [, setOpen] = useCreateWorkspaceModal()
 
     const { data: workspace, isLoading: isLoadingWorkspace } = useGetWorkspace({ id: workspaceId })
-    const { data: workspaces, isLoading: isLoadingWorkspaces } = useGetWorkspaces()
+    const { data: workspaces } = useGetWorkspaces()
 
     const filteredWorkspaces = workspaces?.filter((w) => w._id !== workspaceId)
 

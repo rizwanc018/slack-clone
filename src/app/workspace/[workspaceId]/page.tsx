@@ -12,7 +12,7 @@ import { useEffect } from "react"
 const WorkspaceIdPage = () => {
     const router = useRouter()
     const workspaceId = useWorkspaceId()
-    const { data } = useGetWorkspace({ id: workspaceId })
+    // const { data } = useGetWorkspace({ id: workspaceId })
 
     const [open, setOpen] = useCreateChannelModal()
 

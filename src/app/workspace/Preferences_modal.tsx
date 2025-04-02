@@ -3,7 +3,6 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -100,7 +99,7 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
                                         value={value}
                                         onChange={(e) => setValue(e.target.value)}
                                         required
-                                        disabled={isUpdatingWorkspace}
+                                        disabled={isUpdatingWorkspace || isRemovingWorkspace}
                                         autoFocus
                                         minLength={3}
                                         maxLength={20}
@@ -110,13 +109,15 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
                                         <DialogClose>
                                             <Button
                                                 variant="outline"
-                                                disabled={isUpdatingWorkspace}
+                                                disabled={isUpdatingWorkspace || isRemovingWorkspace}
                                                 onClick={() => setEditOpen(false)}
                                             >
                                                 Cancel
                                             </Button>
                                         </DialogClose>
-                                        <Button disabled={isUpdatingWorkspace}>Save</Button>
+                                        <Button disabled={isUpdatingWorkspace || isRemovingWorkspace}>
+                                            Save
+                                        </Button>
                                     </DialogFooter>
                                 </form>
                             </DialogContent>

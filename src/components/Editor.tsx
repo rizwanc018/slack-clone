@@ -27,7 +27,6 @@ interface EditorProps {
 
 const Editor = ({
     variant = "create",
-    onCancel,
     onSubmit,
     disabled,
     defaultValue,

@@ -6,7 +6,7 @@ interface RendererProps {
 }
 
 const Renderer = ({ value }: RendererProps) => {
-    const [isEmpty, setIsEmpty] = useState(false)
+    const [, setIsEmpty] = useState(false)
     const rendererRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {

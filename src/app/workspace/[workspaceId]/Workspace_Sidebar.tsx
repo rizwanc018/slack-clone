@@ -10,7 +10,6 @@ import { UserItem } from "./User_item"
 import { useCreateChannelModal } from "@/features/channels/store/use_create_channel_modal"
 import { useGetMembers } from "@/features/members/api/use_get_memebers"
 import { useMemberId } from "@/hooks/use_member_id"
-import { Item } from "@radix-ui/react-dropdown-menu"
 
 const WorkspaceSidebar = () => {
     const workspaceId = useWorkspaceId()
@@ -21,7 +20,7 @@ const WorkspaceSidebar = () => {
     const { data: members, isLoading: isMembersLoading } = useGetMembers({ workspaceId })
     const [, setOpen] = useCreateChannelModal()
 
-    if (isWorkspaceLoading || isMemberLoading) {
+    if (isWorkspaceLoading || isMemberLoading || isChannelsLoading || isMembersLoading) {
         return (
             <div className="flex flex-col bg-[#5e2c5f] h-full items-center justify-center">
                 <Loader className="size-5 animate-spin text-white" />
