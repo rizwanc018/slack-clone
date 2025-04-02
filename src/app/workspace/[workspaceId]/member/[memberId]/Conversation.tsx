@@ -5,8 +5,8 @@ import { useGetMessages } from "@/features/messages/api/use_get_messages"
 import { Loader } from "lucide-react"
 import Header from "./Header"
 import ChatInput from "./ChatInput"
-import Message from "@/components/Message"
 import { MessageList } from "@/components/Message_List"
+import { usePanel } from "@/hooks/use_pannel"
 
 interface ConversationProps {
     conversationId: Id<"conversations">
@@ -16,6 +16,8 @@ const Conversation = ({ conversationId }: ConversationProps) => {
     const memeberId = useMemberId()
     const { data: member, isLoading: memberLoading } = useGetMember({ memberId: memeberId })
     const { results, status, loadMore } = useGetMessages({ conversationId })
+
+    const { onOpenProfile } = usePanel()
 
     if (memberLoading || status === "LoadingFirstPage") {
         return (
@@ -27,13 +29,17 @@ const Conversation = ({ conversationId }: ConversationProps) => {
 
     return (
         <div className="flex flex-col h-full">
-            <Header memeberName={member?.user.name} memberImage={member?.user.image} />
+            <Header
+                memeberName={member?.user.name}
+                memberImage={member?.user.image}
+                onClick={() => onOpenProfile(memeberId)}
+            />
             <MessageList
                 data={results}
                 variant="conversation"
                 memberImage={member?.user.image}
                 memberName={member?.user.name}
-                isLoadingMore={ status === "LoadingMore"}
+                isLoadingMore={status === "LoadingMore"}
                 loadMore={loadMore}
                 canLoadMore={status === "CanLoadMore"}
             />
