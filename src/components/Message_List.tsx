@@ -7,9 +7,10 @@ import { Id } from "../../convex/_generated/dataModel"
 import { useWorkspaceId } from "@/hooks/use_workspace_id"
 import { useCurrentMember } from "@/features/members/api/use_current_memeber"
 import { Loader, LoaderIcon } from "lucide-react"
+import ConversationHero from "./Conversation_hero"
 
 interface MessageListProps {
-    memeberName?: string
+    memberName?: string
     memberImage?: string
     channelName?: string
     channelCreationTime?: number
@@ -34,7 +35,7 @@ export const formatDateLabel = (dateKey: string) => {
 }
 
 export const MessageList = ({
-    memeberName,
+    memberName,
     memberImage,
     channelName,
     channelCreationTime,
@@ -44,6 +45,7 @@ export const MessageList = ({
     isLoadingMore,
     canLoadMore,
 }: MessageListProps) => {
+
     const [editingId, setEditingId] = useState<Id<"messages"> | null>(null)
     const workspaceId = useWorkspaceId()
     const { data: currentMember } = useCurrentMember({ workspaceId })
@@ -62,7 +64,7 @@ export const MessageList = ({
     )
 
     return (
-        <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
+        <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar ">
             {Object.entries(groupedMessages || {}).map(([dateKey, messages]) => {
                 return (
                     <div key={dateKey}>
@@ -139,6 +141,9 @@ export const MessageList = ({
             )}
             {variant === "channel" && channelName && channelCreationTime && (
                 <ChannelHero channelName={channelName} channelCreationTime={channelCreationTime} />
+            )}
+            {variant === "conversation" && memberName && (
+                <ConversationHero name={memberName} image={memberImage} />
             )}
         </div>
     )

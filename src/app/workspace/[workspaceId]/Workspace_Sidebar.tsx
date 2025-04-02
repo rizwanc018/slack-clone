@@ -9,9 +9,12 @@ import { WorkspaceSection } from "./Workspace_Section"
 import { UserItem } from "./User_item"
 import { useCreateChannelModal } from "@/features/channels/store/use_create_channel_modal"
 import { useGetMembers } from "@/features/members/api/use_get_memebers"
+import { useMemberId } from "@/hooks/use_member_id"
+import { Item } from "@radix-ui/react-dropdown-menu"
 
 const WorkspaceSidebar = () => {
     const workspaceId = useWorkspaceId()
+    const memberId = useMemberId()
     const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
     const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ id: workspaceId })
     const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
@@ -42,7 +45,11 @@ const WorkspaceSidebar = () => {
                 <SidebarItem label="Threads" icon={MessageSquareText} id="threads" />
                 <SidebarItem label="Drafts & Sent" icon={SendHorizonal} id="drafts" />
             </div>
-            <WorkspaceSection label="Channels" hint="New channel" onNew={member.role === "admin" ? setOpen : undefined}>
+            <WorkspaceSection
+                label="Channels"
+                hint="New channel"
+                onNew={member.role === "admin" ? setOpen : undefined}
+            >
                 {channels?.map((channel) => (
                     <SidebarItem key={channel._id} label={channel.name} icon={HashIcon} id={channel._id} />
                 ))}
@@ -54,6 +61,7 @@ const WorkspaceSidebar = () => {
                         label={member.user.name as string}
                         image={member.user.image as string}
                         id={member._id}
+                        variant={member._id === memberId ? "active" : "default"}
                     />
                 ))}
             </WorkspaceSection>
