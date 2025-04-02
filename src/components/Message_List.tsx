@@ -97,6 +97,7 @@ export const MessageList = ({
                                     createdAt={message._creationTime}
                                     hideThreadButton={variant === "thread"}
                                     threadCount={message.threadCount}
+                                    threadName={message.threadName}
                                     threadImage={message.threadImage}
                                     thereadTimestamp={message.thereadTimestamp}
                                     isEditing={editingId === message._id}

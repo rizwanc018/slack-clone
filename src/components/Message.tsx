@@ -13,6 +13,7 @@ import { useConfirm } from "@/hooks/use_confirm"
 import { useToggleReaction } from "@/features/reactions/api/use_toggle_reaction"
 import Reactions from "./Reactions"
 import { usePanel } from "@/hooks/use_pannel"
+import ThreadBar from "./ThreadBar"
 
 const Renderer = dynamic(() => import("./Renderer"), { ssr: false })
 const Editor = dynamic(() => import("./Editor"), { ssr: false })
@@ -29,6 +30,7 @@ interface MessageProps {
     createdAt: Doc<"messages">["_creationTime"]
     hideThreadButton?: boolean
     threadCount?: number
+    threadName?: string
     threadImage?: string
     thereadTimestamp?: string
     isEditing: boolean
@@ -56,6 +58,7 @@ const Message = ({
     createdAt,
     hideThreadButton,
     threadCount,
+    threadName,
     threadImage,
     thereadTimestamp,
     isEditing,
@@ -71,9 +74,9 @@ const Message = ({
     const { mutate: removeMessage, isPending: isRemovingMessage } = useRemoveMessage()
     const { mutate: toggleReaction, isPending: isTogglingReaction } = useToggleReaction()
 
-    const {parentMessageId, onOpenMessage, onClose } = usePanel()
+    const { parentMessageId, onOpenMessage, onOpenProfile, onClose } = usePanel()
 
-    const isPending = isUpdatingMessage
+    const isPending = isUpdatingMessage || isTogglingReaction
 
     const handleDelete = async () => {
         const ok = await confirm()
@@ -85,7 +88,7 @@ const Message = ({
             {
                 onSuccess: () => {
                     toast.success("Message deleted")
-                    if(parentMessageId === id) {
+                    if (parentMessageId === id) {
                         onClose()
                     }
                 },
@@ -159,6 +162,13 @@ const Message = ({
                                     <span className="text-xs text-muted-foreground">edited</span>
                                 ) : null}
                                 <Reactions data={reactions} onChange={handleReaction} />
+                                <ThreadBar
+                                    count={threadCount}
+                                    image={threadImage}
+                                    thereadTimestamp={thereadTimestamp}
+                                    onClick={() => onOpenMessage(id)}
+                                    name={threadName}
+                                />
                             </div>
                         )}
                     </div>
@@ -190,7 +200,7 @@ const Message = ({
                 )}
             >
                 <div className="flex items-start gap-2">
-                    <button>
+                    <button onClick={() => onOpenProfile(memberId)}>
                         <Avatar>
                             <AvatarImage className="rounded-md" src={authorImage} alt={authorName} />
                             <AvatarFallback>{authorName.charAt(0).toUpperCase()}</AvatarFallback>
@@ -209,7 +219,10 @@ const Message = ({
                     ) : (
                         <div className="flex flex-col w-full overflow-hidden">
                             <div className="text-sm">
-                                <button className="font-bold text-primary hover:underline">
+                                <button
+                                    className="font-bold text-primary hover:underline"
+                                    onClick={() => onOpenProfile(memberId)}
+                                >
                                     {authorName}
                                 </button>
                                 <span>&nbsp;&nbsp;</span>
@@ -223,6 +236,13 @@ const Message = ({
                             <Thumbnail url={image} />
                             {updatedAt ? <span className="text-xs text-muted-foreground">edited</span> : null}
                             <Reactions data={reactions} onChange={handleReaction} />
+                            <ThreadBar
+                                count={threadCount}
+                                image={threadImage}
+                                thereadTimestamp={thereadTimestamp}
+                                onClick={() => onOpenMessage(id)}
+                                name={threadName}
+                            />
                         </div>
                     )}
                 </div>

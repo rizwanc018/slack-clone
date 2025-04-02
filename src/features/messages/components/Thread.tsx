@@ -182,6 +182,7 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
                                         createdAt={message._creationTime}
                                         hideThreadButton={true}
                                         threadCount={message.threadCount}
+                                        threadName={message.threadName}
                                         threadImage={message.threadImage}
                                         thereadTimestamp={message.thereadTimestamp}
                                         isEditing={editingId === message._id}
