@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 interface WorkspaceSectionProps {
     label: string
     hint: string
-    onNew: () => void
+    onNew?: () => void 
     children: React.ReactNode
 }
 
@@ -23,7 +23,7 @@ export const WorkspaceSection = ({ label, hint, onNew, children }: WorkspaceSect
                     className="p-0.5 text-sm text-[#f9edffcc] shrink-0 size-6"
                     onClick={toggle}
                 >
-                    <FaCaretDown className={cn("size-4  transition-transform" , { "-rotate-90": on })} />
+                    <FaCaretDown className={cn("size-4  transition-transform", { "-rotate-90": on })} />
                 </Button>
                 <Button
                     variant="transparent"

@@ -47,13 +47,13 @@ const WorkspaceSidebar = () => {
             <WorkspaceSection
                 label="Channels"
                 hint="New channel"
-                onNew={member.role === "admin" ? setOpen : undefined}
+                onNew={member.role === "admin" ? () => setOpen(true) : undefined}
             >
                 {channels?.map((channel) => (
                     <SidebarItem key={channel._id} label={channel.name} icon={HashIcon} id={channel._id} />
                 ))}
             </WorkspaceSection>
-            <WorkspaceSection label="Members" hint="New channel" onNew={undefined}>
+            <WorkspaceSection label="Members" hint="New channel">
                 {members?.map((member) => (
                     <UserItem
                         key={member._id}
