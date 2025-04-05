@@ -11,12 +11,12 @@ interface ReactionsProps {
 }
 
 const Reactions = ({ data, onChange }: ReactionsProps) => {
+
     const workspaceId = useWorkspaceId()
     const { data: currentMember } = useCurrentMember({ workspaceId })
     const currentMemberId = currentMember?._id
 
     if (data.length === 0 || !currentMemberId) return null
-    console.log("🚀 ~ Reactions ~ data🚀", data)
 
     return (
         <div className="flex gap-x-1">
@@ -26,14 +26,14 @@ const Reactions = ({ data, onChange }: ReactionsProps) => {
                     key={i}
                     className={cn(
                         "h-6 px-2 rounded-full bg-slate-200/70 border border-transparent text-slate-800 gap-x-1",
-                        reaction.memberId.includes(currentMemberId) && "bg-blue-100/70 border-blue-500  "
+                        reaction.memberIds.includes(currentMemberId) && "bg-blue-100/70 border-blue-500  "
                     )}
                 >
                     {reaction.value}
                     <span
                         className={cn(
                             "text-xs font-semibold text-muted-foreground",
-                            reaction.memberId.includes(currentMemberId) && " text-blue-500 "
+                            reaction.memberIds.includes(currentMemberId) && " text-blue-500 "
                         )}
                     >
                         {reaction.count}

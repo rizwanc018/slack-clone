@@ -23,11 +23,11 @@ interface ThreadProps {
 }
 
 type CreateMessageValues = {
-    body: string
-    image?: Id<"_storage"> | undefined
+    channelId: Id<"channels">
     workspaceId: Id<"workspaces">
-    channelId?: Id<"channels">
     parentMessageId: Id<"messages">
+    body: string
+    image: Id<"_storage"> | undefined
 }
 
 const Thread = ({ messageId, onClose }: ThreadProps) => {
@@ -97,7 +97,7 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
 
     const groupedMessages = results?.reduce(
         (groups, message) => {
-            const date = message?._creationTime ? new Date(message._creationTime) : null
+            const date = new Date(message._creationTime)
             const dateKey = format(date, "yyyy-MM-dd")
             if (!groups[dateKey]) {
                 groups[dateKey] = []
@@ -105,7 +105,7 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
             groups[dateKey].unshift(message)
             return groups
         },
-        {} as Record<string, GetMessagesReturnType[]>
+        {} as Record<string, GetMessagesReturnType>
     )
 
     if (loadingMessage || status === "LoadingFirstPage") {
@@ -163,7 +163,7 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
                                 const previousMessage = messages[index - 1]
                                 const isCompact =
                                     previousMessage &&
-                                    previousMessage.user.id === message.user.id &&
+                                    previousMessage.user._id === message.user._id &&
                                     differenceInMinutes(
                                         new Date(message._creationTime),
                                         new Date(previousMessage._creationTime)
@@ -184,7 +184,7 @@ const Thread = ({ messageId, onClose }: ThreadProps) => {
                                         threadCount={message.threadCount}
                                         threadName={message.threadName}
                                         threadImage={message.threadImage}
-                                        thereadTimestamp={message.thereadTimestamp}
+                                        thereadTimestamp={message.threadTimestamp}
                                         isEditing={editingId === message._id}
                                         setEditingId={setEditingId}
                                         isCompact={isCompact}

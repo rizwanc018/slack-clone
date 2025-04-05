@@ -21,8 +21,8 @@ const Editor = dynamic(() => import("./Editor"), { ssr: false })
 interface MessageProps {
     id: Id<"messages">
     memberId: string
-    authorImage: string
-    authorName: string
+    authorImage?: string
+    authorName?: string
     reactions: Array<Omit<Doc<"reactions">, "memberId"> & { count: number; memberIds: Id<"members">[] }>
     body: Doc<"messages">["body"]
     image: string | null | undefined
@@ -32,7 +32,7 @@ interface MessageProps {
     threadCount?: number
     threadName?: string
     threadImage?: string
-    thereadTimestamp?: string
+    thereadTimestamp?: number
     isEditing: boolean
     setEditingId: (id: Id<"messages"> | null) => void
     isCompact?: boolean
